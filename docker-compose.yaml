@@ -1,0 +1,54 @@
+version: '3'
+
+volumes:
+  db_data:
+
+networks:
+  backend_network:
+    driver: bridge
+  app_network:
+    driver: bridge
+
+services:
+  backend:
+    container_name: app_backend
+    build: ./backend
+    ports:
+      - ${BACKEND_EXTERNAL_PORT}:${BACKEND_INTERNAL_PORT}
+    environment:
+      - PORT=${BACKEND_INTERNAL_PORT}
+    restart: on-failure
+    working_dir: /app-backend
+    command: ["npm", "run", "start:dev"]
+    volumes:
+      - ./backend:/app-backend
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "lsof", "-t", "-i:9999"]
+      timeout: 10s
+      retries: 5
+    networks:
+      - backend_network
+      - app_network
+
+  db:
+    image: postgres:latest
+    container_name: app_database
+    ports:
+      - ${DB_EXTERNAL_PORT}:${DB_INTERNAL_PORT}
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_PORT: ${DB_INTERNAL_PORT}
+    restart: "always"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      timeout: 10s
+      retries: 5
+    networks:
+      - backend_network
