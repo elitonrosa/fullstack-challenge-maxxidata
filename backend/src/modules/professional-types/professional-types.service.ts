@@ -58,14 +58,19 @@ export class ProfessionalTypesService {
         where: { id: +id },
       });
     } catch {
-      throw new NotFoundException(`ProfessionalType with id ${id} not found`);
+      throw new NotFoundException(`ProfessionalType with ID ${id} not found`);
     }
   }
 
   async update(id: number, updateProfessionalType: UpdateProfessionalTypeDto): Promise<ProfessionalType> {
     const professionalType = await this.findOne(id);
 
-    return this.professionalTypeRepository.save({ ...professionalType, ...updateProfessionalType });
+    const updated = await this.professionalTypeRepository.preload({
+      ...professionalType,
+      ...updateProfessionalType,
+    });
+
+    return this.professionalTypeRepository.save(updated);
   }
 
   async remove(id: number): Promise<ProfessionalType> {

@@ -23,5 +23,5 @@ export class PaginationDto {
 
   @IsOptional()
   @IsEnum(OrderBy)
-  readonly orderBy?: OrderDirection;
+  readonly orderBy?: OrderBy;
 }
