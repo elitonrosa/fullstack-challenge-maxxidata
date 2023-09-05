@@ -36,17 +36,14 @@ export class ProfessionalsService {
   }
 
   async findAll(pagination: PaginationDto): Promise<Paginated<Professional>> {
-    const {
-      page = 1,
-      pageSize = 10,
-      order = OrderDirection.ASC,
-      orderBy = OrderBy.ID,
-      status = Status.ACTIVE,
-    } = pagination;
+    const { page = 1, order = OrderDirection.ASC, orderBy = OrderBy.ID, status = Status.ACTIVE } = pagination;
+    let { pageSize = 10 } = pagination;
+
+    if (pageSize > 100) pageSize = 100;
 
     if (status === Status.ALL) {
       const [data, total] = await this.professionalRepository.findAndCount({
-        take: pageSize > 100 ? 100 : pageSize,
+        take: pageSize,
         skip: (page - 1) * pageSize,
         order: { [orderBy]: order },
       });
@@ -56,7 +53,7 @@ export class ProfessionalsService {
       return { data, total, pageSize, page, totalPages };
     } else {
       const [data, total] = await this.professionalRepository.findAndCount({
-        take: pageSize > 100 ? 100 : pageSize,
+        take: pageSize,
         skip: (page - 1) * pageSize,
         order: { [orderBy]: order },
         where: { status: status === Status.ACTIVE },
@@ -100,7 +97,10 @@ export class ProfessionalsService {
 
       return this.professionalRepository.save(updated);
     } else {
-      const updated = await this.professionalRepository.preload({ ...professional, ...updateProfessional });
+      const updated = await this.professionalRepository.preload({
+        ...professional,
+        ...updateProfessional,
+      });
 
       return this.professionalRepository.save(updated);
     }

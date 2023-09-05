@@ -17,7 +17,7 @@ export const createMockRepository = <T = any>(): MockRepository<T> => ({
 
 export const professionalTypeMock: ProfessionalType = {
   id: 1,
-  description: 'Dev',
+  description: 'Desenvolvedor',
   status: true,
   createdAt: new Date(),
   updatedAt: new Date(),
@@ -41,15 +41,15 @@ export const personalizedPaginatedMock: Paginated<ProfessionalType> = {
 
 export const updatedProfessionalTypeMock: ProfessionalType = {
   ...professionalTypeMock,
-  description: 'Programmer',
+  description: 'Programador',
 };
 
 export const createProfessionalTypeMock: CreateProfessionalTypeDto = {
-  description: 'Dev',
+  description: 'Desenvolvedor',
   status: true,
 };
 
 export const updateProfessionalTypeMock: UpdateProfessionalTypeDto = {
-  description: 'Programmer',
+  description: 'Programador',
   status: true,
 };
