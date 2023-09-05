@@ -12,7 +12,7 @@ import {
   updatedProfessionalTypeMock,
   updateProfessionalTypeMock,
 } from './professional-types.mock';
-import { NotFoundException } from '@nestjs/common';
+import { NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { PaginationDto } from '../../../dtos/pagination.dto';
 import { OrderBy, OrderDirection, Status } from '../../../enums/pagination.enum';
 
@@ -95,7 +95,7 @@ describe('ProfessionalTypesService', () => {
       expect(professionalTypes).toEqual(personalizedPaginatedMock);
     });
 
-    it('should return a list of professional types with personalized status', async () => {
+    it('should return a list of professional types with status false', async () => {
       repository.findAndCount.mockResolvedValue([[], 0]);
       const pagination: PaginationDto = {
         status: Status.INACTIVE,
@@ -110,6 +110,34 @@ describe('ProfessionalTypesService', () => {
         pageSize: 10,
         totalPages: 0,
       });
+    });
+
+    it('should return a list of professional types with status true/false', async () => {
+      repository.findAndCount.mockResolvedValue([[], 0]);
+      const pagination: PaginationDto = {
+        status: Status.ALL,
+      };
+
+      const professionalTypes = await service.findAll(pagination);
+
+      expect(professionalTypes).toEqual({
+        data: [],
+        total: 0,
+        page: 1,
+        pageSize: 10,
+        totalPages: 0,
+      });
+    });
+
+    it('should limit pageSize to 100', async () => {
+      repository.findAndCount.mockResolvedValue([[], 0]);
+      const pagination: PaginationDto = {
+        pageSize: 999,
+      };
+
+      const professionalTypes = await service.findAll(pagination);
+
+      expect(professionalTypes.pageSize).toEqual(100);
     });
   });
 
@@ -128,6 +156,18 @@ describe('ProfessionalTypesService', () => {
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);
         expect(error.message).toEqual(`ProfessionalType with ID 999 not found`);
+      }
+    });
+
+    it('should throw an error when a professional type has relationships', async () => {
+      repository.findOneOrFail.mockResolvedValueOnce(professionalTypeMock);
+      repository.remove.mockRejectedValueOnce(new Error());
+
+      try {
+        await service.remove(professionalTypeMock.id);
+      } catch (error) {
+        expect(error).toBeInstanceOf(UnprocessableEntityException);
+        expect(error.message).toEqual(`ProfessionalType with ID ${professionalTypeMock.id} cannot be removed`);
       }
     });
   });
