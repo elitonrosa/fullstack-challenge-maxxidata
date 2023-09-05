@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as process from 'process';
 import { ProfessionalTypesModule } from './modules/professional-types/professional-types.module';
+import { ProfessionalsModule } from './modules/professionals/professionals.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ProfessionalTypesModule } from './modules/professional-types/profession
       synchronize: true,
     }),
     ProfessionalTypesModule,
+    ProfessionalsModule,
   ],
 })
 export class AppModule {}
