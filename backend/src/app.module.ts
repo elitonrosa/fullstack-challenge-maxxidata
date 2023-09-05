@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as process from 'process';
+import { ProfessionalTypesModule } from './modules/professional-types/professional-types.module';
 
 @Module({
   imports: [
@@ -12,7 +13,9 @@ import * as process from 'process';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       autoLoadEntities: true,
+      synchronize: true,
     }),
+    ProfessionalTypesModule,
   ],
 })
 export class AppModule {}
