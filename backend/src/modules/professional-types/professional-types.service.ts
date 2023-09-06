@@ -4,9 +4,9 @@ import { UpdateProfessionalTypeDto } from './dtos/update-professional-type.dto';
 import { ProfessionalType } from './entities/professional-type.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PaginationDto } from '../../dtos/pagination.dto';
-import { Paginated } from '../../types/pagination';
-import { OrderBy, OrderDirection, Status } from '../../enums/pagination.enum';
+import { PaginationDto } from '../../common/dtos/pagination.dto';
+import { Paginated } from '../../common/types/pagination';
+import { OrderBy, OrderDirection, Status } from '../../common/enums/pagination.enum';
 
 @Injectable()
 export class ProfessionalTypesService {

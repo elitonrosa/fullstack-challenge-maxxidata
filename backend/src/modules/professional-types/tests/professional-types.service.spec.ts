@@ -13,8 +13,8 @@ import {
   updateProfessionalTypeMock,
 } from './professional-types.mock';
 import { NotFoundException, UnprocessableEntityException } from '@nestjs/common';
-import { PaginationDto } from '../../../dtos/pagination.dto';
-import { Status } from '../../../enums/pagination.enum';
+import { PaginationDto } from '../../../common/dtos/pagination.dto';
+import { Status } from '../../../common/enums/pagination.enum';
 
 describe('ProfessionalTypesService', () => {
   let service: ProfessionalTypesService;

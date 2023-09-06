@@ -1,7 +1,7 @@
 import { ProfessionalType } from '../entities/professional-type.entity';
 import { CreateProfessionalTypeDto } from '../dtos/create-professional-type.dto';
 import { UpdateProfessionalTypeDto } from '../dtos/update-professional-type.dto';
-import { Paginated } from '../../../types/pagination';
+import { Paginated } from '../../../common/types/pagination';
 import { Repository } from 'typeorm';
 
 export type MockRepository<T = any> = Partial<Record<keyof Repository<T>, jest.Mock>>;

@@ -4,9 +4,9 @@ import { Professional } from './entities/professional.entity';
 import { Repository } from 'typeorm';
 import { CreateProfessionalDto } from './dtos/create-professional.dto';
 import { UpdateProfessionalDto } from './dtos/update-professional.dto';
-import { PaginationDto } from '../../dtos/pagination.dto';
-import { Paginated } from '../../types/pagination';
-import { OrderBy, OrderDirection, Status } from '../../enums/pagination.enum';
+import { PaginationDto } from '../../common/dtos/pagination.dto';
+import { Paginated } from '../../common/types/pagination';
+import { OrderBy, OrderDirection, Status } from '../../common/enums/pagination.enum';
 import { ProfessionalType } from '../professional-types/entities/professional-type.entity';
 
 @Injectable()

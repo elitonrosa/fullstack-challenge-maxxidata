@@ -13,8 +13,8 @@ import {
 } from './professionals.mock';
 import { ProfessionalType } from '../../professional-types/entities/professional-type.entity';
 import { NotFoundException } from '@nestjs/common';
-import { Status } from '../../../enums/pagination.enum';
-import { PaginationDto } from '../../../dtos/pagination.dto';
+import { Status } from '../../../common/enums/pagination.enum';
+import { PaginationDto } from '../../../common/dtos/pagination.dto';
 
 describe('ProfessionalsService', () => {
   let service: ProfessionalsService;
