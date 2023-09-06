@@ -1,0 +1,78 @@
+version: '3'
+
+volumes:
+  db_data:
+
+networks:
+  backend_network:
+    driver: bridge
+  app_network:
+    driver: bridge
+
+services:
+  #  frontend:
+  #    container_name: app_frontend
+  #    build: ./frontend
+  #    ports:
+  #      - ${FRONTEND_EXTERNAL_PORT}:${FRONTEND_INTERNAL_PORT}
+  #    environment:
+  #      APP_PORT: ${FRONTEND_INTERNAL_PORT}
+  #      API_URL: ${API_URL}
+  #    restart: on-failure
+  #    working_dir: /app-frontend
+  #    command: [ "npm", "run", "dev" ]
+  #    volumes:
+  #      - ./frontend:/app-frontend
+  #    depends_on:
+  #      backend:
+  #        condition: service_healthy
+  #    networks:
+  #      - app_network
+
+  backend:
+    container_name: app_backend
+    build: ./backend
+    ports:
+      - ${BACKEND_EXTERNAL_PORT}:${BACKEND_INTERNAL_PORT}
+    environment:
+      APP_PORT: ${BACKEND_INTERNAL_PORT}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_EXTERNAL_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+    restart: on-failure
+    working_dir: /app-backend
+    command: [ "npm", "run", "start:dev" ]
+    volumes:
+      - ./backend:/app-backend
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "lsof", "-t", "-i:9999" ]
+      timeout: 10s
+      retries: 5
+    networks:
+      - backend_network
+      - app_network
+
+  db:
+    image: postgres:latest
+    container_name: app_database
+    ports:
+      - ${DB_EXTERNAL_PORT}:${DB_INTERNAL_PORT}
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_PORT: ${DB_INTERNAL_PORT}
+    restart: "always"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      timeout: 10s
+      retries: 5
+    networks:
+      - backend_network
