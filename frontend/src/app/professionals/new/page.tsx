@@ -1,10 +1,12 @@
 import ProfessionalsForm from "@/components/pages/professionals/professionals-form";
 import { localFetch } from "@/functions/fetch-utils";
-import { ProfessionalType } from "@/types/profissional-types-types";
+import { ProfessionalType } from "@/types/professional-types-types";
 
 const getProfessionalTypes = async () => {
   const { data } = await localFetch<ProfessionalType[]>("/professionals/types");
+
   if (!data) return [];
+
   return data;
 };
 

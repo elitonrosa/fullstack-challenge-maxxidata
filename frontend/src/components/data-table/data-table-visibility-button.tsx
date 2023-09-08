@@ -18,9 +18,11 @@ export function DataTableVisibilityButton<TData, TValue>({ table }: DataTableVis
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="mr-3">
           <MixerHorizontalIcon className="mr-2 h-4 w-4" />
+
           <p className="hidden md:block">Ocultar colunas</p>
         </Button>
       </DropdownMenuTrigger>
+
       <DropdownMenuContent align="end">
         {table
           .getAllColumns()

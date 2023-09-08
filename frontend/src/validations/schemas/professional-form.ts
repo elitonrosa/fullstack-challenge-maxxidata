@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const professionalFormSchema = z.object({
-  name: z.string().min(3, "O nome precisa ter ao menos 6 caracteres.").max(100).optional(),
+  name: z.string().min(6, "O nome precisa ter ao menos 6 caracteres.").max(100).optional(),
   email: z.string().email("O email precisa ser válido.").optional().or(z.literal("")),
   phone: z
     .string()

@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { externalFetch } from "@/functions/fetch-utils";
-import { revalidatePath } from "next/cache";
 import { FetchStatus } from "@/enums/fetch-status";
+import { revalidatePath } from "next/cache";
 
 export const DELETE = async (_request: NextRequest, { params: { id } }: { params: { id: string } }) => {
-  const { status, data } = await externalFetch(`/professionals/${id}`, {
+  const { status, data } = await externalFetch(`/professionals/types/${id}`, {
     method: "DELETE",
   });
 
@@ -14,7 +14,7 @@ export const DELETE = async (_request: NextRequest, { params: { id } }: { params
 };
 
 export const GET = async (_request: NextRequest, { params: { id } }: { params: { id: string } }) => {
-  const { status, data } = await externalFetch(`/professionals/${id}`, {
+  const { status, data } = await externalFetch(`/professionals/types/${id}`, {
     method: "GET",
   });
 
@@ -24,7 +24,7 @@ export const GET = async (_request: NextRequest, { params: { id } }: { params: {
 export const PATCH = async (request: NextRequest, { params: { id } }: { params: { id: string } }) => {
   const body = await request.json();
 
-  const { status, data } = await externalFetch(`/professionals/${id}`, {
+  const { status, data } = await externalFetch(`/professionals/types/${id}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",

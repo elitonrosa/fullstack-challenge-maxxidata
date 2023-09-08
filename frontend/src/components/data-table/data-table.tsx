@@ -30,11 +30,7 @@ type DataTableProps<TData, TValue> = {
   searchColumn: string;
 };
 
-export default function DataTable<TData extends Registry, TValue>({
-  columns,
-  data,
-  searchColumn,
-}: DataTableProps<TData, TValue>) {
+export default function DataTable<TData, TValue>({ columns, data, searchColumn }: DataTableProps<TData, TValue>) {
   const [columnSorting, setColumnSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -67,6 +63,7 @@ export default function DataTable<TData extends Registry, TValue>({
           onChange={(event) => table.getColumn(searchColumn)?.setFilterValue(event.target.value)}
           className="flex w-1/2 min-w-[250px] items-center py-4"
         />
+
         <div className="flex items-center justify-center gap-4">
           <Link href={`${path}/new`}>
             <Button className="bg-green-600 hover:bg-green-600/90">
@@ -74,9 +71,11 @@ export default function DataTable<TData extends Registry, TValue>({
               <span>{path === "/professionals" ? "Novo profissional" : "Nova profissão"}</span>
             </Button>
           </Link>
+
           <DataTableVisibilityButton table={table} />
         </div>
       </div>
+
       <div className="rounded-md border px-2">
         <Table>
           <TableHeader>
@@ -92,6 +91,7 @@ export default function DataTable<TData extends Registry, TValue>({
               </TableRow>
             ))}
           </TableHeader>
+
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
@@ -99,7 +99,7 @@ export default function DataTable<TData extends Registry, TValue>({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {cell.column.columnDef.cell === "actions"
-                        ? flexRender(<DataTableActions registry={cell.row.original} />, cell.getContext())
+                        ? flexRender(<DataTableActions registry={cell.row.original as Registry} />, cell.getContext())
                         : flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
@@ -115,8 +115,10 @@ export default function DataTable<TData extends Registry, TValue>({
           </TableBody>
         </Table>
       </div>
+
       <div className="flex items-center justify-between space-x-2 py-4">
         <p className="ml-2 text-sm font-medium text-muted-foreground">{`${data.length} registros`}</p>
+
         <DataTablePagination table={table} />
       </div>
     </>

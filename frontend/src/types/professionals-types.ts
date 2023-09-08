@@ -1,4 +1,4 @@
-import { ProfessionalType } from "@/types/profissional-types-types";
+import { ProfessionalType } from "@/types/professional-types-types";
 
 export type ProfessionalDto = {
   id: string;

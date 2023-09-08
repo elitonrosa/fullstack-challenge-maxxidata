@@ -11,7 +11,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
-import { ProfessionalType } from "@/types/profissional-types-types";
+import { ProfessionalType } from "@/types/professional-types-types";
 import React, { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { professionalFormSchema } from "@/validations/schemas/professional-form";
@@ -45,7 +45,7 @@ export default function ProfessionalsForm({ mode, data, entity }: ProfessionalsF
     },
   });
 
-  const registerNewProfessional = async (values: z.infer<typeof professionalFormSchema>) => {
+  const newProfessional = async (values: z.infer<typeof professionalFormSchema>) => {
     const { status } = await localFetch("/professionals", {
       method: "POST",
       headers: {
@@ -104,7 +104,7 @@ export default function ProfessionalsForm({ mode, data, entity }: ProfessionalsF
 
   const handleSubmit = async (values: z.infer<typeof professionalFormSchema>) => {
     if (mode === "update") return await updateProfessional(values);
-    await registerNewProfessional(values);
+    await newProfessional(values);
   };
 
   const handlePushToProfessionals = () => {
@@ -138,17 +138,19 @@ export default function ProfessionalsForm({ mode, data, entity }: ProfessionalsF
     <>
       <Alert
         title="Profissional cadastrado com sucesso!"
-        description="Deseja cadastrar outro usuário?"
+        description="Deseja cadastrar outro profissional?"
         open={showAlert}
         confirmText="Sim"
         rejectText="Não"
         confirmFunc={handleFormReset}
         rejectFunc={handlePushToProfessionals}
       />
+
       <main className="flex h-full w-full flex-col items-center justify-center py-10">
         <h2 className="mb-9 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
           {`${mode === "create" ? "Cadastrar" : "Editar"} profissional`}
         </h2>
+
         <div className="flex w-full justify-center">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSubmit)} className="flex w-1/2 flex-col gap-3">
@@ -160,39 +162,48 @@ export default function ProfessionalsForm({ mode, data, entity }: ProfessionalsF
                     <FormLabel>
                       Nome Completo <span className="text-red-500">*</span>
                     </FormLabel>
+
                     <FormControl>
                       <Input placeholder="João das Neves" {...field} />
                     </FormControl>
+
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="email"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Email</FormLabel>
+
                     <FormControl>
                       <Input placeholder="joaoneves@email.com" {...field} />
                     </FormControl>
+
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Telefone</FormLabel>
+
                     <FormControl>
                       <Input maxLength={15} onKeyUp={handlePhoneMask} placeholder="(00) 00000-0000" {...field} />
                     </FormControl>
+
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <div className="flex justify-between">
                 <FormField
                   control={form.control}
@@ -202,6 +213,7 @@ export default function ProfessionalsForm({ mode, data, entity }: ProfessionalsF
                       <FormLabel className={form.getValues("professionalTypeId") !== 0 ? "text-black" : ""}>
                         Profissão <span className="text-red-500">*</span>
                       </FormLabel>
+
                       <Popover>
                         <PopoverTrigger asChild>
                           <FormControl>
@@ -213,14 +225,18 @@ export default function ProfessionalsForm({ mode, data, entity }: ProfessionalsF
                               {field.value
                                 ? professionalTypes?.find((type) => type.value === field.value)?.label
                                 : "Selecionar profissão"}
+
                               <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                             </Button>
                           </FormControl>
                         </PopoverTrigger>
+
                         <PopoverContent className="h-60 w-[250px] p-0">
                           <Command>
                             <CommandInput placeholder="Selecione uma profissão..." className="h-9" />
+
                             <CommandEmpty>Nenhuma profissão encontrada.</CommandEmpty>
+
                             <CommandGroup className="overflow-y-scroll">
                               {professionalTypes?.map((type) => (
                                 <CommandItem
@@ -231,6 +247,7 @@ export default function ProfessionalsForm({ mode, data, entity }: ProfessionalsF
                                   }}
                                 >
                                   {type.label}
+
                                   <CheckIcon
                                     className={cn(
                                       "ml-auto h-4 w-4",
@@ -243,10 +260,12 @@ export default function ProfessionalsForm({ mode, data, entity }: ProfessionalsF
                           </Command>
                         </PopoverContent>
                       </Popover>
+
                       <FormMessage hidden={form.getValues("professionalTypeId") !== 0} />
                     </FormItem>
                   )}
                 />
+
                 <FormField
                   control={form.control}
                   name="status"
@@ -255,6 +274,7 @@ export default function ProfessionalsForm({ mode, data, entity }: ProfessionalsF
                       <FormControl>
                         <div className="flex items-center space-x-2">
                           <FormLabel>Profissional ativo?</FormLabel>
+
                           <Switch checked={field.value} onCheckedChange={field.onChange} />
                         </div>
                       </FormControl>
@@ -262,6 +282,7 @@ export default function ProfessionalsForm({ mode, data, entity }: ProfessionalsF
                   )}
                 />
               </div>
+
               <Button type="submit" variant="default" className="mt-4 py-5">
                 {mode === "create" ? "Cadastrar" : "Salvar"}
               </Button>

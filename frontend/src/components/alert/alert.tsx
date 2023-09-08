@@ -43,10 +43,13 @@ export default function Alert({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
+
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
+
         <AlertDialogFooter>
           <AlertDialogCancel onClick={handleReject}>{rejectText ?? "Cancelar"}</AlertDialogCancel>
+
           <AlertDialogAction
             type="button"
             className={

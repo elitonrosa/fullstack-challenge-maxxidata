@@ -29,7 +29,11 @@ export const localFetch = async <T>(
   endpoint: RequestInfo | URL,
   init?: RequestInit | undefined,
 ): Promise<FetchResponse<T>> => {
-  const response = await fetch(`${LOCAL_API_URL}${endpoint}`, init);
+  try {
+    const response = await fetch(`${LOCAL_API_URL}${endpoint}`, init);
 
-  return (await response.json()) as FetchResponse<T>;
+    return (await response.json()) as FetchResponse<T>;
+  } catch {
+    return { status: FetchStatus.ERROR, data: null };
+  }
 };
