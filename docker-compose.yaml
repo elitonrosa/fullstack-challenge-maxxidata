@@ -20,7 +20,8 @@ services:
       API_URL: ${API_URL}
     restart: on-failure
     working_dir: /app-frontend
-    command: [ "npm", "run", "dev" ]
+    entrypoint: [ "npm", "run", "start" ]
+    tty: true
     volumes:
       - ./frontend:/app-frontend
     depends_on:
