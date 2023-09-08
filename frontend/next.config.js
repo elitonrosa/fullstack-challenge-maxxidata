@@ -2,7 +2,7 @@
 const nextConfig = {
   env: {
     API_URL: process.env.API_URL,
-    API_PORT: process.env.API_PORT,
+    APP_PORT: process.env.APP_PORT,
   },
 };
 

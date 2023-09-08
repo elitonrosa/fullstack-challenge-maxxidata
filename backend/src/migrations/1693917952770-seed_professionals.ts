@@ -2,7 +2,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class SeedProfessionals1693917952770 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`
+    await queryRunner.query(` 
         INSERT INTO public.professionals (name, phone, email, status, created_at, updated_at, professional_type_id)
         VALUES
           ('João Pedro Santos', '(11)99125-3068', 'joaopedro@email.com', true, NOW(), NOW(), 1),

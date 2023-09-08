@@ -5,10 +5,17 @@ import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    cors: {
+      origin: '*',
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    },
+  });
   const config = new DocumentBuilder()
     .setTitle('Professional Management API')
-    .setDescription('API para gerenciamento de profissionais e tipos de profissionais.')
+    .setDescription(
+      'API para gerenciamento de profissionais e tipos de profissionais.',
+    )
     .setVersion('1.0')
     .addTag('Profissionais')
     .addTag('Tipos de Profissionais')
