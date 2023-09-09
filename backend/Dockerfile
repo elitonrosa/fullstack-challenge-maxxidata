@@ -1,9 +1,9 @@
-FROM node:18.17.1-alpine3.18
+FROM node:18-alpine
 
-WORKDIR /app_backend
+RUN apk add --no-cache libc6-compat
 
-COPY package*.json .
-
-RUN npm install
+WORKDIR /app-backend
 
 COPY . .
+
+RUN npm install

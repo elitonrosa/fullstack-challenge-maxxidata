@@ -2,6 +2,8 @@ version: '3'
 
 volumes:
   db_data:
+  app_backend_data:
+  app_frontend_data:
 
 networks:
   backend_network:
@@ -12,19 +14,22 @@ networks:
 services:
   frontend:
     container_name: app_frontend
-    build: ./frontend
+    image: app_frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        EXTERNAL_API_URL: ${EXTERNAL_API_URL}
+        NEXT_PUBLIC_INTERNAL_API_URL: ${INTERNAL_API_URL}
     ports:
       - ${FRONTEND_EXTERNAL_PORT}:${FRONTEND_INTERNAL_PORT}
     environment:
-      NEXT_PUBLIC_INTERNAL_API_URL: ${INTERNAL_API_URL}
-      EXTERNAL_API_URL: ${EXTERNAL_API_URL}
       NEXT_TELEMETRY_DISABLED: 1
     restart: always
     working_dir: /app-frontend
-    entrypoint: [ "npm", "start" ]
-    tty: true
     volumes:
-      - ./frontend:/app-frontend
+      - app_frontend_data:/app-frontend
+    command: npm run start
     depends_on:
       backend:
         condition: service_healthy
@@ -33,7 +38,10 @@ services:
 
   backend:
     container_name: app_backend
-    build: ./backend
+    image: app_backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     ports:
       - ${BACKEND_EXTERNAL_PORT}:${BACKEND_INTERNAL_PORT}
     environment:
@@ -43,11 +51,11 @@ services:
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
-    restart: on-failure
+    restart: always
     working_dir: /app-backend
-    command: [ "npm", "start" ]
     volumes:
-      - ./backend:/app-backend
+      - app_backend_data:/app-backend
+    command: npm run start:dev
     depends_on:
       db:
         condition: service_healthy

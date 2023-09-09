@@ -1,5 +1,6 @@
-import { FetchStatus } from "@/enums/fetch-status";
+import { FetchStatus }   from "@/enums/fetch-status";
 import { mapStatusHttp } from "@/utils/map-status-http";
+
 
 const EXTERNAL_API_URL = process.env.EXTERNAL_API_URL;
 const LOCAL_API_URL = process.env.NEXT_PUBLIC_INTERNAL_API_URL;
