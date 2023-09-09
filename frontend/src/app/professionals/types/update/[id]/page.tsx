@@ -3,6 +3,7 @@ import { ProfessionalType } from "@/types/professional-types-types";
 import { FetchStatus } from "@/enums/fetch-status";
 import { notFound } from "next/navigation";
 import ProfessionalTypesForm from "@/components/pages/professional-types/professional-types-form";
+import Header from "@/components/layout/header";
 
 const getProfessional = async (id: string) => {
   return await localFetch<ProfessionalType>(`/professionals/types/${id}`);
@@ -13,5 +14,10 @@ export default async function UpdateProfessional({ params }: { params: { id: str
 
   if (status === FetchStatus.NOT_FOUND) return notFound();
 
-  return <ProfessionalTypesForm entity={data} mode="update" />;
+  return (
+    <>
+      <Header>Editar profissão</Header>
+      <ProfessionalTypesForm entity={data} mode="update" />
+    </>
+  );
 }

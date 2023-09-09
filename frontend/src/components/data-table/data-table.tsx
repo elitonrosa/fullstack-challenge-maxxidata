@@ -55,7 +55,7 @@ export default function DataTable<TData, TValue>({ columns, data, searchColumn }
   const path = usePathname();
 
   return (
-    <>
+    <main className="px-10 py-6 pl-24">
       <div className="flex items-center justify-between pb-4">
         <Input
           placeholder={`Buscar ${searchColumn === "Nome" ? "profissional" : "profissão"}`}
@@ -121,6 +121,6 @@ export default function DataTable<TData, TValue>({ columns, data, searchColumn }
 
         <DataTablePagination table={table} />
       </div>
-    </>
+    </main>
   );
 }

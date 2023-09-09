@@ -116,10 +116,6 @@ export default function ProfessionalTypesForm({ mode, entity }: ProfessionalsFor
       />
 
       <main className="flex h-full w-full flex-col items-center justify-center py-10">
-        <h2 className="mb-9 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
-          {`${mode === "create" ? "Cadastrar" : "Editar"} profissão`}
-        </h2>
-
         <div className="flex w-full justify-center">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSubmit)} className="flex w-1/2 flex-col gap-3">

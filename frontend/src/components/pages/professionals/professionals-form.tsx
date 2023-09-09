@@ -147,148 +147,142 @@ export default function ProfessionalsForm({ mode, data, entity }: ProfessionalsF
       />
 
       <main className="flex h-full w-full flex-col items-center justify-center py-10">
-        <h2 className="mb-9 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
-          {`${mode === "create" ? "Cadastrar" : "Editar"} profissional`}
-        </h2>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="flex w-1/2 flex-col gap-3">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Nome Completo <span className="text-red-500">*</span>
+                  </FormLabel>
 
-        <div className="flex w-full justify-center">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleSubmit)} className="flex w-1/2 flex-col gap-3">
+                  <FormControl>
+                    <Input placeholder="João das Neves" {...field} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+
+                  <FormControl>
+                    <Input placeholder="joaoneves@email.com" {...field} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Telefone</FormLabel>
+
+                  <FormControl>
+                    <Input maxLength={15} onKeyUp={handlePhoneMask} placeholder="(00) 00000-0000" {...field} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="flex justify-between">
               <FormField
                 control={form.control}
-                name="name"
+                name="professionalTypeId"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Nome Completo <span className="text-red-500">*</span>
+                  <FormItem className="flex flex-col">
+                    <FormLabel className={form.getValues("professionalTypeId") !== 0 ? "text-black" : ""}>
+                      Profissão <span className="text-red-500">*</span>
                     </FormLabel>
 
-                    <FormControl>
-                      <Input placeholder="João das Neves" {...field} />
-                    </FormControl>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            className={cn("w-[250px] justify-between", !field.value && "text-muted-foreground")}
+                          >
+                            {field.value
+                              ? professionalTypes?.find((type) => type.value === field.value)?.label
+                              : "Selecionar profissão"}
 
-                    <FormMessage />
+                            <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+
+                      <PopoverContent className="h-60 w-[250px] p-0">
+                        <Command>
+                          <CommandInput placeholder="Selecione uma profissão..." className="h-9" />
+
+                          <CommandEmpty>Nenhuma profissão encontrada.</CommandEmpty>
+
+                          <CommandGroup className="overflow-y-scroll">
+                            {professionalTypes?.map((type) => (
+                              <CommandItem
+                                value={type.label}
+                                key={type.value}
+                                onSelect={() => {
+                                  form.setValue("professionalTypeId", type.value);
+                                }}
+                              >
+                                {type.label}
+
+                                <CheckIcon
+                                  className={cn(
+                                    "ml-auto h-4 w-4",
+                                    type.value === field.value ? "opacity-100" : "opacity-0",
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+
+                    <FormMessage hidden={form.getValues("professionalTypeId") !== 0} />
                   </FormItem>
                 )}
               />
 
               <FormField
                 control={form.control}
-                name="email"
+                name="status"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-
+                  <FormItem className="mt-8">
                     <FormControl>
-                      <Input placeholder="joaoneves@email.com" {...field} />
-                    </FormControl>
+                      <div className="flex items-center space-x-2">
+                        <FormLabel>Profissional ativo?</FormLabel>
 
-                    <FormMessage />
+                        <Switch checked={field.value} onCheckedChange={field.onChange} />
+                      </div>
+                    </FormControl>
                   </FormItem>
                 )}
               />
+            </div>
 
-              <FormField
-                control={form.control}
-                name="phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Telefone</FormLabel>
-
-                    <FormControl>
-                      <Input maxLength={15} onKeyUp={handlePhoneMask} placeholder="(00) 00000-0000" {...field} />
-                    </FormControl>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <div className="flex justify-between">
-                <FormField
-                  control={form.control}
-                  name="professionalTypeId"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col">
-                      <FormLabel className={form.getValues("professionalTypeId") !== 0 ? "text-black" : ""}>
-                        Profissão <span className="text-red-500">*</span>
-                      </FormLabel>
-
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button
-                              variant="outline"
-                              role="combobox"
-                              className={cn("w-[250px] justify-between", !field.value && "text-muted-foreground")}
-                            >
-                              {field.value
-                                ? professionalTypes?.find((type) => type.value === field.value)?.label
-                                : "Selecionar profissão"}
-
-                              <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                            </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-
-                        <PopoverContent className="h-60 w-[250px] p-0">
-                          <Command>
-                            <CommandInput placeholder="Selecione uma profissão..." className="h-9" />
-
-                            <CommandEmpty>Nenhuma profissão encontrada.</CommandEmpty>
-
-                            <CommandGroup className="overflow-y-scroll">
-                              {professionalTypes?.map((type) => (
-                                <CommandItem
-                                  value={type.label}
-                                  key={type.value}
-                                  onSelect={() => {
-                                    form.setValue("professionalTypeId", type.value);
-                                  }}
-                                >
-                                  {type.label}
-
-                                  <CheckIcon
-                                    className={cn(
-                                      "ml-auto h-4 w-4",
-                                      type.value === field.value ? "opacity-100" : "opacity-0",
-                                    )}
-                                  />
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
-
-                      <FormMessage hidden={form.getValues("professionalTypeId") !== 0} />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="status"
-                  render={({ field }) => (
-                    <FormItem className="mt-8">
-                      <FormControl>
-                        <div className="flex items-center space-x-2">
-                          <FormLabel>Profissional ativo?</FormLabel>
-
-                          <Switch checked={field.value} onCheckedChange={field.onChange} />
-                        </div>
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <Button type="submit" variant="default" className="mt-4 py-5">
-                {mode === "create" ? "Cadastrar" : "Salvar"}
-              </Button>
-            </form>
-          </Form>
-        </div>
+            <Button type="submit" variant="default" className="mt-4 py-5">
+              {mode === "create" ? "Cadastrar" : "Salvar"}
+            </Button>
+          </form>
+        </Form>
       </main>
     </>
   );

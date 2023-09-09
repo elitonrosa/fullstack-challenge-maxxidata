@@ -1,7 +1,14 @@
+import Header from "@/components/layout/header";
+
 export default function Home() {
   return (
-    <div>
-      <h1>Gerenciador de Profissionais</h1>
-    </div>
+    <>
+      <Header>Gerenciamento de profissionais</Header>
+      <main className="pt-5">
+        <h1 className="text-center text-sm text-muted-foreground">
+          Bem-vindo ao sistema de gerenciamento de profissionais
+        </h1>
+      </main>
+    </>
   );
 }
