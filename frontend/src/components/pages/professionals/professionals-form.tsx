@@ -148,7 +148,7 @@ export default function ProfessionalsForm({ mode, data, entity }: ProfessionalsF
       />
 
       <main className="flex h-full w-full items-center justify-center">
-        <Card className="flex h-[90%] w-1/2 flex-col items-center justify-center py-10">
+        <Card className="mt-5 flex w-[90%] flex-col items-center justify-center py-6 sm:ml-20 sm:h-[90%] sm:w-[75%] sm:py-10 md:ml-0 md:w-[70%] lg:w-1/2">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSubmit)} className="flex w-full max-w-[500px] flex-col gap-3 px-6">
               <FormField
@@ -201,7 +201,7 @@ export default function ProfessionalsForm({ mode, data, entity }: ProfessionalsF
                 )}
               />
 
-              <div className="flex justify-between">
+              <div className="flex flex-col justify-between sm:flex-row">
                 <FormField
                   control={form.control}
                   name="professionalTypeId"
@@ -217,7 +217,10 @@ export default function ProfessionalsForm({ mode, data, entity }: ProfessionalsF
                             <Button
                               variant="outline"
                               role="combobox"
-                              className={cn("w-[250px] justify-between", !field.value && "text-muted-foreground")}
+                              className={cn(
+                                "w-full justify-between sm:w-[250px]",
+                                !field.value && "text-muted-foreground",
+                              )}
                             >
                               {field.value
                                 ? professionalTypes?.find((type) => type.value === field.value)?.label
@@ -228,7 +231,7 @@ export default function ProfessionalsForm({ mode, data, entity }: ProfessionalsF
                           </FormControl>
                         </PopoverTrigger>
 
-                        <PopoverContent className="h-60 w-[250px] p-0">
+                        <PopoverContent className="h-60 w-full p-0 sm:w-[250px]">
                           <Command>
                             <CommandInput placeholder="Selecione uma profissão..." className="h-9" />
 

@@ -16,10 +16,10 @@ export function DataTableVisibilityButton<TData, TValue>({ table }: DataTableVis
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="mr-3">
-          <MixerHorizontalIcon className="mr-2 h-4 w-4" />
+        <Button variant="outline" className="">
+          <MixerHorizontalIcon className="mr-2 h-4 w-4 max-[390px]:mr-0" />
 
-          <p className="hidden md:block">Ocultar colunas</p>
+          <p className="max-[390px]:hidden">Ocultar colunas</p>
         </Button>
       </DropdownMenuTrigger>
 

@@ -11,8 +11,8 @@ type DataTablePaginationProps<TData> = {
 export function DataTablePagination<TData>({ table }: DataTablePaginationProps<TData>) {
   return (
     <div className="flex items-center justify-between px-2">
-      <div className="flex items-center space-x-6 lg:space-x-8">
-        <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-6 sm:flex-row lg:space-x-8">
+        <div className="hidden items-center space-x-2 sm:flex">
           <p className="text-sm font-medium">Registros por página</p>
           <Select
             value={`${table.getState().pagination.pageSize}`}

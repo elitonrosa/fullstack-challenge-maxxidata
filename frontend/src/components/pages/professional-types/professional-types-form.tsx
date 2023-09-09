@@ -117,7 +117,7 @@ export default function ProfessionalTypesForm({ mode, entity }: ProfessionalsFor
       />
 
       <main className="flex h-full w-full flex-col items-center justify-center py-10">
-        <Card className="flex h-[90%] w-1/2 flex-col items-center justify-center py-10">
+        <Card className="mt-5 flex w-[90%] flex-col items-center justify-center py-6 sm:ml-20 sm:h-[90%] sm:w-[75%] sm:py-10 md:ml-0 md:w-[70%] lg:w-1/2">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSubmit)} className="flex w-full max-w-[500px] flex-col gap-3 px-6">
               <FormField

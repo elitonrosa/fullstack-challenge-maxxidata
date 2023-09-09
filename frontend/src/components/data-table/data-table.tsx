@@ -55,20 +55,22 @@ export default function DataTable<TData, TValue>({ columns, data, searchColumn }
   const path = usePathname();
 
   return (
-    <main className="px-10 py-6 pl-24">
-      <div className="flex items-center justify-between pb-4">
+    <main className="px-4 py-6 sm:px-10 sm:pl-24">
+      <div className="flex flex-col items-center justify-between gap-4 pb-4 md:flex-row md:gap-0">
         <Input
           placeholder={`Buscar ${searchColumn === "Nome" ? "profissional" : "profissão"}`}
           value={(table.getColumn(searchColumn)?.getFilterValue() as string) ?? ""}
           onChange={(event) => table.getColumn(searchColumn)?.setFilterValue(event.target.value)}
-          className="flex w-1/2 min-w-[250px] items-center py-4"
+          className="flex w-full min-w-[200px] items-center py-4 md:w-[60%]"
         />
 
-        <div className="flex items-center justify-center gap-4">
+        <div className="flex w-full items-center justify-between gap-2 sm:gap-4 md:justify-end">
           <Link href={`${path}/new`}>
             <Button>
-              <PlusCircledIcon className="mr-2 h-5 w-5" />
-              <span>{path === "/professionals" ? "Novo profissional" : "Nova profissão"}</span>
+              <PlusCircledIcon className="mr-2 h-5 w-5 max-[374px]:mr-0" />
+              <span className="max-[374px]:hidden">
+                {path === "/professionals" ? "Novo profissional" : "Nova profissão"}
+              </span>
             </Button>
           </Link>
 
@@ -116,7 +118,7 @@ export default function DataTable<TData, TValue>({ columns, data, searchColumn }
         </Table>
       </div>
 
-      <div className="flex items-center justify-between space-x-2 py-4">
+      <div className="flex flex-col items-center justify-between gap-4 space-x-2 py-4 md:flex-row md:items-center">
         <p className="ml-2 text-sm font-medium text-muted-foreground">{`${data.length} registros`}</p>
 
         <DataTablePagination table={table} />
