@@ -6,7 +6,7 @@ import { UpdateProfessionalDto } from './dtos/update-professional.dto';
 import { PaginationDto } from '../../common/dtos/pagination.dto';
 import { Paginated } from '../../common/types/pagination';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ProfissionalPaginatedDto } from './dtos/profissional-paginated.dto';
+import { ProfessionalPaginatedDto } from './dtos/professional-paginated.dto';
 import { NestErrorDefaultSwagger } from '../../helpers/swagger/nest-error-default.swagger';
 import { NestBadRequestErrorSwagger } from '../../helpers/swagger/nest-bad-request-error.swagger';
 
@@ -20,7 +20,7 @@ export class ProfessionalsController {
   @ApiResponse({
     status: 200,
     description: 'Lista de profissionais',
-    type: ProfissionalPaginatedDto,
+    type: ProfessionalPaginatedDto,
   })
   async findAll(@Query() pagination: PaginationDto): Promise<Paginated<Professional>> {
     return this.professionalsService.findAll(pagination);

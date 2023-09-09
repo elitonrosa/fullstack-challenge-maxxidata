@@ -10,24 +10,26 @@ networks:
     driver: bridge
 
 services:
-  #  frontend:
-  #    container_name: app_frontend
-  #    build: ./frontend
-  #    ports:
-  #      - ${FRONTEND_EXTERNAL_PORT}:${FRONTEND_INTERNAL_PORT}
-  #    environment:
-  #      APP_PORT: ${FRONTEND_INTERNAL_PORT}
-  #      API_URL: ${API_URL}
-  #    restart: on-failure
-  #    working_dir: /app-frontend
-  #    command: [ "npm", "run", "dev" ]
-  #    volumes:
-  #      - ./frontend:/app-frontend
-  #    depends_on:
-  #      backend:
-  #        condition: service_healthy
-  #    networks:
-  #      - app_network
+  frontend:
+    container_name: app_frontend
+    build: ./frontend
+    ports:
+      - ${FRONTEND_EXTERNAL_PORT}:${FRONTEND_INTERNAL_PORT}
+    environment:
+      NEXT_PUBLIC_INTERNAL_API_URL: ${INTERNAL_API_URL}
+      EXTERNAL_API_URL: ${EXTERNAL_API_URL}
+      NEXT_TELEMETRY_DISABLED: 1
+    restart: always
+    working_dir: /app-frontend
+    entrypoint: [ "npm", "start" ]
+    tty: true
+    volumes:
+      - ./frontend:/app-frontend
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - app_network
 
   backend:
     container_name: app_backend
@@ -43,7 +45,7 @@ services:
       DB_NAME: ${DB_NAME}
     restart: on-failure
     working_dir: /app-backend
-    command: [ "npm", "run", "start:dev" ]
+    command: [ "npm", "start" ]
     volumes:
       - ./backend:/app-backend
     depends_on:
