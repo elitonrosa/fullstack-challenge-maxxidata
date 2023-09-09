@@ -66,7 +66,7 @@ export default function DataTable<TData, TValue>({ columns, data, searchColumn }
 
         <div className="flex items-center justify-center gap-4">
           <Link href={`${path}/new`}>
-            <Button className="bg-green-600 hover:bg-green-600/90">
+            <Button>
               <PlusCircledIcon className="mr-2 h-5 w-5" />
               <span>{path === "/professionals" ? "Novo profissional" : "Nova profissão"}</span>
             </Button>

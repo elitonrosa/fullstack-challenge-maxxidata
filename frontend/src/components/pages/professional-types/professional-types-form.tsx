@@ -15,6 +15,7 @@ import { localFetch } from "@/functions/fetch-utils";
 import { FetchStatus } from "@/enums/fetch-status";
 import { professionalTypesFormSchema } from "@/validations/schemas/professional-types-form";
 import { ProfessionalType } from "@/types/professional-types-types";
+import { Card } from "@/components/ui/card";
 
 type ProfessionalsFormProps = {
   mode: "create" | "update";
@@ -116,9 +117,9 @@ export default function ProfessionalTypesForm({ mode, entity }: ProfessionalsFor
       />
 
       <main className="flex h-full w-full flex-col items-center justify-center py-10">
-        <div className="flex w-full justify-center">
+        <Card className="flex h-[90%] w-1/2 flex-col items-center justify-center py-10">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleSubmit)} className="flex w-1/2 flex-col gap-3">
+            <form onSubmit={form.handleSubmit(handleSubmit)} className="flex w-full max-w-[500px] flex-col gap-3 px-6">
               <FormField
                 control={form.control}
                 name="description"
@@ -158,7 +159,7 @@ export default function ProfessionalTypesForm({ mode, entity }: ProfessionalsFor
               </Button>
             </form>
           </Form>
-        </div>
+        </Card>
       </main>
     </>
   );
