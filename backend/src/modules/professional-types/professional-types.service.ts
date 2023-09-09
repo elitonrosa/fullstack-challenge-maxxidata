@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { CreateProfessionalTypeDto } from './dtos/create-professional-type.dto';
 import { UpdateProfessionalTypeDto } from './dtos/update-professional-type.dto';
 import { ProfessionalType } from './entities/professional-type.entity';
@@ -10,11 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PaginationDto } from '../../common/dtos/pagination.dto';
 import { Paginated } from '../../common/types/pagination';
-import {
-  OrderBy,
-  OrderDirection,
-  Status,
-} from '../../common/enums/pagination.enum';
+import { OrderBy, OrderDirection, Status } from '../../common/enums/pagination.enum';
 
 @Injectable()
 export class ProfessionalTypesService {
@@ -23,21 +15,12 @@ export class ProfessionalTypesService {
     private readonly professionalTypeRepository: Repository<ProfessionalType>,
   ) {}
 
-  async create(
-    createProfessionalType: CreateProfessionalTypeDto,
-  ): Promise<ProfessionalType> {
+  async create(createProfessionalType: CreateProfessionalTypeDto): Promise<ProfessionalType> {
     return this.professionalTypeRepository.save(createProfessionalType);
   }
 
-  async findAll(
-    pagination: PaginationDto,
-  ): Promise<Paginated<ProfessionalType>> {
-    const {
-      page = 1,
-      order = OrderDirection.ASC,
-      orderBy = OrderBy.ID,
-      status = Status.ACTIVE,
-    } = pagination;
+  async findAll(pagination: PaginationDto): Promise<Paginated<ProfessionalType>> {
+    const { page = 1, order = OrderDirection.ASC, orderBy = OrderBy.ID, status = Status.ACTIVE } = pagination;
     let { pageSize = 10 } = pagination;
 
     if (pageSize > 100) pageSize = 100;
@@ -76,10 +59,7 @@ export class ProfessionalTypesService {
     }
   }
 
-  async update(
-    id: number,
-    updateProfessionalType: UpdateProfessionalTypeDto,
-  ): Promise<ProfessionalType> {
+  async update(id: number, updateProfessionalType: UpdateProfessionalTypeDto): Promise<ProfessionalType> {
     const professionalType = await this.findOne(id);
 
     const updated = await this.professionalTypeRepository.preload({
@@ -96,9 +76,7 @@ export class ProfessionalTypesService {
     try {
       return await this.professionalTypeRepository.remove(professionalType);
     } catch {
-      throw new UnprocessableEntityException(
-        `ProfessionalType with ID ${id} cannot be removed`,
-      );
+      throw new UnprocessableEntityException(`ProfessionalType with ID ${id} cannot be removed`);
     }
   }
 }

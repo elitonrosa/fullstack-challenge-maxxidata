@@ -11,7 +11,7 @@ export class SeedProfessionalTypes1693917577701 implements MigrationInterface {
           ('Médico', true, NOW(), NOW()),
           ('Enfermeiro', true, NOW(), NOW()),
           ('Fisioterapeuta', true, NOW(), NOW()),
-          ('Nutricionista', true, NOW(), NOW()),
+          ('Nutricionista', true, NOW(), NOW()), 
           ('Psicólogo', true, NOW(), NOW()),
           ('Assistente Social', true, NOW(), NOW()),
           ('Fonoaudiólogo', true, NOW(), NOW()),
