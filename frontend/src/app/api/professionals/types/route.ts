@@ -3,11 +3,17 @@ import { PaginationDto } from "@/types/pagination-types";
 import { ProfessionalTypeDto } from "@/types/professional-types-types";
 import { NextRequest, NextResponse } from "next/server";
 import { FetchStatus } from "@/enums/fetch-status";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 export const GET = async () => {
   const { status, data } = await externalFetch<PaginationDto<ProfessionalTypeDto>>(
     "/professionals/types?pageSize=100&status=all",
+    {
+      cache: "force-cache",
+      next: {
+        tags: ["professionalTypes"],
+      },
+    },
   );
 
   if (status !== FetchStatus.SUCCESS) return NextResponse.json({ status, data });
@@ -30,7 +36,7 @@ export const POST = async (request: NextRequest) => {
 
   if (status !== FetchStatus.SUCCESS) return NextResponse.json({ status, data });
 
-  revalidatePath("/professionals");
+  revalidateTag("professionalTypes");
 
   return NextResponse.json({ status, data });
 };

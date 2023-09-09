@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { externalFetch } from "@/functions/fetch-utils";
 import { ProfessionalDto } from "@/types/professionals-types";
 import { PaginationDto } from "@/types/pagination-types";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { FetchStatus } from "@/enums/fetch-status";
 
 export const POST = async (request: NextRequest) => {
@@ -18,7 +18,7 @@ export const POST = async (request: NextRequest) => {
 
   if (status !== FetchStatus.SUCCESS) return NextResponse.json({ status, data });
 
-  revalidatePath("/professionals");
+  revalidateTag("professionals");
 
   return NextResponse.json({ status, data });
 };
@@ -26,6 +26,12 @@ export const POST = async (request: NextRequest) => {
 export const GET = async () => {
   const { status, data } = await externalFetch<PaginationDto<ProfessionalDto>>(
     "/professionals?pageSize=100&status=all",
+    {
+      cache: "force-cache",
+      next: {
+        tags: ["professionals"],
+      },
+    },
   );
 
   if (!data) return NextResponse.json({ status, data });

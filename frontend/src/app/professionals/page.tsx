@@ -1,7 +1,7 @@
-import { localFetch } from "@/functions/fetch-utils";
 import { Professional } from "@/types/professionals-types";
 import DataTable from "@/components/data-table/data-table";
 import { professionalsColumns } from "@/data/data-table-columns";
+import { localFetch } from "@/functions/fetch-utils";
 
 const getProfessionals = async () => {
   const { data } = await localFetch<Professional[]>("/professionals");

@@ -14,7 +14,10 @@ export const externalFetch = async <T>(
   init?: RequestInit | undefined,
 ): Promise<FetchResponse<T>> => {
   try {
-    const response = await fetch(`${EXTERNAL_API_URL}${endpoint}`, init);
+    const response = await fetch(`${EXTERNAL_API_URL}${endpoint}`, {
+      cache: "no-store",
+      ...init,
+    });
     const data: T = await response.json();
 
     if (response.ok) return { status: FetchStatus.SUCCESS, data };
@@ -30,7 +33,10 @@ export const localFetch = async <T>(
   init?: RequestInit | undefined,
 ): Promise<FetchResponse<T>> => {
   try {
-    const response = await fetch(`${LOCAL_API_URL}${endpoint}`, init);
+    const response = await fetch(`${LOCAL_API_URL}${endpoint}`, {
+      cache: "no-store",
+      ...init,
+    });
 
     return (await response.json()) as FetchResponse<T>;
   } catch {

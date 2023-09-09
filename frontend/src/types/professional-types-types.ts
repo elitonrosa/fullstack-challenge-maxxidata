@@ -1,5 +1,5 @@
 export type ProfessionalTypeDto = {
-  id: string;
+  id: number;
   description: string;
   status: boolean;
   createdAt: Date;

@@ -1,14 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { externalFetch } from "@/functions/fetch-utils";
 import { FetchStatus } from "@/enums/fetch-status";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 export const DELETE = async (_request: NextRequest, { params: { id } }: { params: { id: string } }) => {
   const { status, data } = await externalFetch(`/professionals/types/${id}`, {
     method: "DELETE",
   });
 
-  if (status === FetchStatus.SUCCESS) revalidatePath("/professionals");
+  if (status === FetchStatus.SUCCESS) {
+    revalidateTag("professionalTypes");
+    revalidateTag(`professionalType-${id}`);
+  }
 
   return NextResponse.json({ status, data });
 };
@@ -16,6 +19,10 @@ export const DELETE = async (_request: NextRequest, { params: { id } }: { params
 export const GET = async (_request: NextRequest, { params: { id } }: { params: { id: string } }) => {
   const { status, data } = await externalFetch(`/professionals/types/${id}`, {
     method: "GET",
+    cache: "force-cache",
+    next: {
+      tags: [`professionalType-${id}`],
+    },
   });
 
   return NextResponse.json({ status, data });
@@ -34,7 +41,9 @@ export const PATCH = async (request: NextRequest, { params: { id } }: { params: 
 
   if (status !== FetchStatus.SUCCESS) return NextResponse.json({ status, data });
 
-  revalidatePath("/professionals");
+  revalidateTag("professionalTypes");
+  revalidateTag(`professionalType-${id}`);
+  revalidateTag("professionals");
 
   return NextResponse.json({ status, data });
 };

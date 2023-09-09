@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { externalFetch } from "@/functions/fetch-utils";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { FetchStatus } from "@/enums/fetch-status";
 
 export const DELETE = async (_request: NextRequest, { params: { id } }: { params: { id: string } }) => {
@@ -8,7 +8,10 @@ export const DELETE = async (_request: NextRequest, { params: { id } }: { params
     method: "DELETE",
   });
 
-  if (status === FetchStatus.SUCCESS) revalidatePath("/professionals");
+  if (status === FetchStatus.SUCCESS) {
+    revalidateTag("professionals");
+    revalidateTag(`professional-${id}`);
+  }
 
   return NextResponse.json({ status, data });
 };
@@ -16,6 +19,10 @@ export const DELETE = async (_request: NextRequest, { params: { id } }: { params
 export const GET = async (_request: NextRequest, { params: { id } }: { params: { id: string } }) => {
   const { status, data } = await externalFetch(`/professionals/${id}`, {
     method: "GET",
+    cache: "force-cache",
+    next: {
+      tags: [`professional-${id}`],
+    },
   });
 
   return NextResponse.json({ status, data });
@@ -34,7 +41,8 @@ export const PATCH = async (request: NextRequest, { params: { id } }: { params: 
 
   if (status !== FetchStatus.SUCCESS) return NextResponse.json({ status, data });
 
-  revalidatePath("/professionals");
+  revalidateTag("professionals");
+  revalidateTag(`professional-${id}`);
 
   return NextResponse.json({ status, data });
 };

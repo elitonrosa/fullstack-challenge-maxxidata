@@ -1,12 +1,12 @@
 import { ProfessionalType } from "@/types/professional-types-types";
 
 export type ProfessionalDto = {
-  id: string;
+  id: number;
   name: string;
   email: string;
   phone: string;
   professionalType: {
-    id: string;
+    id: number;
     description: string;
     status: boolean;
     createdAt: Date;
@@ -18,7 +18,7 @@ export type ProfessionalDto = {
 };
 
 export type Professional = {
-  id: string;
+  id: number;
   name: string;
   email: string;
   phone: string;
