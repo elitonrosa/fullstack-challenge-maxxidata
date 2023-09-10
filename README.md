@@ -1,8 +1,8 @@
-# Desafio Full Stack - Controle de Profissionais
+# Desafio Full Stack - Gerenciamento de Profissionais
 
 <hr>
 
-Este é um projeto de controle de profissionais desenvolvido como parte de um desafio Full Stack proposto pela Maxxidata. O objetivo deste projeto é criar uma aplicação que permite consultar, criar e editar informações sobre profissionais e suas profissões correspondentes.
+Este é um projeto de gerenciamento de profissionais desenvolvido como parte de um desafio Full Stack proposto pela Maxxidata. O objetivo deste projeto é criar uma aplicação que permite consultar, criar e editar informações sobre profissionais e suas profissões correspondentes.
 
 
 ## Tecnologias Utilizadas
