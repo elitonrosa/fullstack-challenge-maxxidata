@@ -1,10 +1,11 @@
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
+import { ColumnDef }        from "@tanstack/react-table";
+import { Button }           from "@/components/ui/button";
 import { ProfessionalType } from "@/types/professional-types-types";
-import { Professional } from "@/types/professionals-types";
-import { CaretSortIcon } from "@radix-ui/react-icons";
+import { Professional }     from "@/types/professionals-types";
+import { CaretSortIcon }    from "@radix-ui/react-icons";
+
 
 export const professionalsColumns: ColumnDef<Professional>[] = [
   {
@@ -15,7 +16,7 @@ export const professionalsColumns: ColumnDef<Professional>[] = [
         <Button
           variant="ghost"
           className="px-0 hover:bg-none hover:text-accent-foreground"
-          onClick={() => column.toggleSorting(column.getIsSorted() !== "asc")}
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           ID
           <CaretSortIcon className="ml-2 h-4 w-4" />
