@@ -30,13 +30,11 @@ Este é um projeto de controle de profissionais desenvolvido como parte de um de
 ## Funcionalidades
 
 ### Backend
-API REST com endpoints para:
-- Consultar tipos de profissionais
-- Consultar profissionais
-- Criar tipos de profissionais
-- Criar profissionais
-- Editar tipos de profissionais
-- Editar profissionais
+API REST com:
+- Endpoints para consultar profissionais e tipos de profissionais
+- Endpoints para criar profissionais e tipos de profissionais
+- Endpoints para editar profissionais e tipos de profissionais
+- Endpoints para deletar profissionais e tipos de profissionais
 - Testes unitários para garantir a integridade das funcionalidades
 - Documentação da API com Swagger
 
