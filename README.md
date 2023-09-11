@@ -55,14 +55,21 @@ Aplicação React com:
 Requisitos:
 - Docker
 
-Para executar a aplicação completa, siga os passos abaixo:
+Para executar a aplicação em modo "produção", siga os passos abaixo:
 - Clone este repositório e acesse a pasta do projeto
-- Crie uma cópia do arquivo .env.example e renomeie para .env (Já contém as variáveis de ambiente necessárias para o projeto)
-- Execute o comando docker-compose up -d (Para criar os containers do banco de dados e da aplicação)
+- Crie uma cópia do arquivo ".env.prod.example" e renomeie para ".env.prod"
+- Execute o comando "docker compose -f docker-compose.prod.yaml --env-file .env.prod up" (Para criar os containers do banco de dados e da aplicação)
 - Acesse a aplicação em http://localhost:3000
 - A API estará disponível em http://localhost:9999
 - Acesse a documentação da API em http://localhost:9999/api/documentation
-- O banco de dados estará disponível em http://localhost:5432
+
+Para executar a aplicação em modo "desenvolvimento", siga os passos abaixo:
+- Clone este repositório e acesse a pasta do projeto
+- Crie uma cópia do arquivo ".env.dev.example" e renomeie para ".env.dev"
+- Execute o comando "docker compose -f docker-compose.dev.yaml --env-file .env.dev up" (Para criar os containers do banco de dados e da aplicação)
+- Acesse a aplicação em http://localhost:3000
+- A API estará disponível em http://localhost:9999
+- Acesse a documentação da API em http://localhost:9999/api/documentation
 
 ## Decisões de Projeto
 

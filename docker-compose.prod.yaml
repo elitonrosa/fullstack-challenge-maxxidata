@@ -17,7 +17,7 @@ services:
     image: app_frontend
     build:
       context: ./frontend
-      dockerfile: Dockerfile
+      dockerfile: prod.Dockerfile
       args:
         EXTERNAL_API_URL: ${EXTERNAL_API_URL}
         NEXT_PUBLIC_INTERNAL_API_URL: ${INTERNAL_API_URL}
@@ -41,7 +41,7 @@ services:
     image: app_backend
     build:
       context: ./backend
-      dockerfile: Dockerfile
+      dockerfile: prod.Dockerfile
     ports:
       - ${BACKEND_EXTERNAL_PORT}:${BACKEND_INTERNAL_PORT}
     environment:

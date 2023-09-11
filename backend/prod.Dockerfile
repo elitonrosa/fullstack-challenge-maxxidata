@@ -4,6 +4,10 @@ RUN apk add --no-cache libc6-compat
 
 WORKDIR /app-backend
 
-COPY . .
+COPY package*.json .
 
 RUN npm install
+
+COPY . .
+
+RUN npm run build
