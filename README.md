@@ -63,7 +63,7 @@ Para executar a aplicação completa, siga os passos abaixo:
 - Execute o comando docker-compose up -d (Para criar os containers do banco de dados e da aplicação)
 - Acesse a aplicação em http://localhost:3000
 - A API estará disponível em http://localhost:9999
-- Acesse a documentação da API em http://localhost:9999/api/documentation
+- Acesse a documentação da API em http://localhost:9999/api
 - O banco de dados estará disponível em http://localhost:5432
 
 ## Decisões de Projeto

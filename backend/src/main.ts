@@ -8,18 +8,20 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: {
       origin: '*',
-      methods: 'GET,PATCH,POST,DELETE',
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     },
   });
   const config = new DocumentBuilder()
     .setTitle('Professional Management API')
-    .setDescription('API para gerenciamento de profissionais e tipos de profissionais.')
+    .setDescription(
+      'API para gerenciamento de profissionais e tipos de profissionais.',
+    )
     .setVersion('1.0')
     .addTag('Profissionais')
     .addTag('Tipos de Profissionais')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/documentation', app, document);
+  SwaggerModule.setup('api', app, document);
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

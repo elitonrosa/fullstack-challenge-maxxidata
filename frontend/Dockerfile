@@ -4,9 +4,11 @@ RUN apk add --no-cache libc6-compat
 
 WORKDIR /app-frontend
 
-COPY . .
+COPY package*.json .
 
 RUN npm install
+
+COPY . .
 
 ARG EXTERNAL_API_URL
 ENV EXTERNAL_API_URL=${EXTERNAL_API_URL}
