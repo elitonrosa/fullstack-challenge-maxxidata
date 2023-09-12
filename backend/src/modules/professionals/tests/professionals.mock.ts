@@ -56,8 +56,10 @@ export const updateProfessionalMock: UpdateProfessionalDto = {
 
 export const paginatedMock = {
   data: [professionalMock, { ...professionalMock, id: 2 }],
-  page: 1,
-  pageSize: 10,
-  total: 2,
-  totalPages: 1,
+  meta: {
+    total: 2,
+    currentPage: 1,
+    lastPage: 1,
+    perPage: 50,
+  },
 };
