@@ -13,7 +13,7 @@ import {
   updateProfessionalTypeMock,
 } from './professional-types.mock';
 import { NotFoundException, UnprocessableEntityException } from '@nestjs/common';
-import { PaginationDto } from '../../../common/dtos/pagination.dto';
+import { PaginationParamsDto } from '../../../common/dtos/pagination-params.dto';
 import { Status } from '../../../common/enums/pagination.enum';
 
 describe('ProfessionalTypesService', () => {
@@ -64,7 +64,8 @@ describe('ProfessionalTypesService', () => {
 
   describe('findAll', () => {
     it('should return a list of professional types with default pagination', async () => {
-      const pagination: PaginationDto = {};
+      const pagination: PaginationParamsDto = {};
+
       const professionalTypes = await service.findAll(pagination);
 
       expect(professionalTypes).toEqual(defaultPaginatedMock);
@@ -72,10 +73,8 @@ describe('ProfessionalTypesService', () => {
 
     it('should return a list of professional types with personalized pagination', async () => {
       repository.findAndCount.mockResolvedValue([[], 1]);
-      const pagination: PaginationDto = {
-        page: 2,
-        pageSize: 5,
-      };
+      const pagination: PaginationParamsDto = { offset: 2, limit: 5 };
+
       const professionalTypes = await service.findAll(pagination);
 
       expect(professionalTypes).toEqual(personalizedPaginatedMock);
@@ -83,7 +82,8 @@ describe('ProfessionalTypesService', () => {
 
     it('should return a list of professional types with status true/false', async () => {
       repository.findAndCount.mockResolvedValue([[], 0]);
-      const pagination: PaginationDto = {
+
+      const pagination: PaginationParamsDto = {
         status: Status.ALL,
       };
 
@@ -91,39 +91,48 @@ describe('ProfessionalTypesService', () => {
 
       expect(professionalTypes).toEqual({
         data: [],
-        total: 0,
-        page: 1,
-        pageSize: 10,
-        totalPages: 0,
+        meta: {
+          total: 0,
+          currentPage: 1,
+          lastPage: 1,
+          perPage: 50,
+        },
       });
     });
 
-    it('should limit pageSize to 100', async () => {
-      repository.findAndCount.mockResolvedValue([[], 0]);
-      const pagination: PaginationDto = {
-        pageSize: 999,
+    it('should limit page to 500', async () => {
+      repository.findAndCount.mockResolvedValue([[], 1]);
+
+      const pagination: PaginationParamsDto = {
+        limit: 999,
       };
 
       const professionalTypes = await service.findAll(pagination);
 
-      expect(professionalTypes.pageSize).toEqual(100);
+      expect(professionalTypes.meta.perPage).toEqual(500);
+    });
+
+    it('should set page size to 1 if 0 is given', async () => {
+      repository.findAndCount.mockResolvedValue([[], 1]);
+
+      const pagination: PaginationParamsDto = {
+        limit: 0,
+      };
+
+      const professionalTypes = await service.findAll(pagination);
+
+      expect(professionalTypes.meta.perPage).toEqual(1);
     });
   });
 
   describe('update', () => {
     it('should return professional type updated when an existing ID is provided', async () => {
       repository.preload.mockResolvedValue(updatedProfessionalTypeMock);
-      repository.save.mockResolvedValue({
-        ...professionalTypeMock,
-        ...updateProfessionalTypeMock,
-      });
+      repository.save.mockResolvedValue({ ...professionalTypeMock, ...updateProfessionalTypeMock });
 
       const professionalType = await service.update(2, updateProfessionalTypeMock);
 
-      expect(professionalType).toEqual({
-        ...professionalTypeMock,
-        ...updateProfessionalTypeMock,
-      });
+      expect(professionalType).toEqual({ ...professionalTypeMock, ...updateProfessionalTypeMock });
     });
 
     it('should throw an error when an unexisting id is given', async () => {

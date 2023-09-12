@@ -4,10 +4,10 @@ import { Professional } from './entities/professional.entity';
 import { Repository } from 'typeorm';
 import { CreateProfessionalDto } from './dtos/create-professional.dto';
 import { UpdateProfessionalDto } from './dtos/update-professional.dto';
-import { PaginationDto } from '../../common/dtos/pagination.dto';
-import { Paginated } from '../../common/types/pagination';
 import { OrderBy, OrderDirection, Status } from '../../common/enums/pagination.enum';
 import { ProfessionalType } from '../professional-types/entities/professional-type.entity';
+import { PaginationParamsDto } from '../../common/dtos/pagination-params.dto';
+import { ProfessionalPaginatedDto } from './dtos/professional-paginated.dto';
 
 @Injectable()
 export class ProfessionalsService {
@@ -35,34 +35,34 @@ export class ProfessionalsService {
     }
   }
 
-  async findAll(pagination: PaginationDto): Promise<Paginated<Professional>> {
-    const { page = 1, order = OrderDirection.ASC, orderBy = OrderBy.ID, status = Status.ACTIVE } = pagination;
-    let { pageSize = 10 } = pagination;
+  async findAll(pagination: PaginationParamsDto): Promise<ProfessionalPaginatedDto> {
+    const {
+      limit = 50,
+      offset = 0,
+      orderBy = OrderBy.ID,
+      order = OrderDirection.ASC,
+      status = Status.ALL,
+    } = pagination;
 
-    if (pageSize > 100) pageSize = 100;
+    const options = {
+      order: { [orderBy]: order === OrderDirection.ASC ? OrderDirection.ASC : OrderDirection.DESC },
+      take: Math.min(Math.max(limit, 1), 500),
+      skip: offset,
+    };
 
-    if (status === Status.ALL) {
-      const [data, total] = await this.professionalRepository.findAndCount({
-        take: pageSize,
-        skip: (page - 1) * pageSize,
-        order: { [orderBy]: order },
-      });
+    const [professionals, total] = await this.professionalRepository.findAndCount(
+      status === Status.ALL ? options : { ...options, where: { status: status === Status.ACTIVE } },
+    );
 
-      const totalPages = Math.ceil(total / pageSize);
-
-      return { data, total, pageSize, page, totalPages };
-    } else {
-      const [data, total] = await this.professionalRepository.findAndCount({
-        take: pageSize,
-        skip: (page - 1) * pageSize,
-        order: { [orderBy]: order },
-        where: { status: status === Status.ACTIVE },
-      });
-
-      const totalPages = Math.ceil(total / pageSize);
-
-      return { data, total, pageSize, page, totalPages };
-    }
+    return {
+      data: professionals,
+      meta: {
+        total,
+        currentPage: Math.floor(offset / limit) + 1,
+        lastPage: Math.ceil(total / limit) < 1 ? 1 : Math.ceil(total / limit),
+        perPage: Math.min(Math.max(limit, 1), 500),
+      },
+    };
   }
 
   async findOne(id: number): Promise<Professional> {

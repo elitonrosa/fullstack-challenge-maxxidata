@@ -14,7 +14,7 @@ import {
 import { ProfessionalType } from '../../professional-types/entities/professional-type.entity';
 import { NotFoundException } from '@nestjs/common';
 import { Status } from '../../../common/enums/pagination.enum';
-import { PaginationDto } from '../../../common/dtos/pagination.dto';
+import { PaginationParamsDto } from '../../../common/dtos/pagination-params.dto';
 
 describe('ProfessionalsService', () => {
   let service: ProfessionalsService;
@@ -91,63 +91,50 @@ describe('ProfessionalsService', () => {
     });
 
     it('should return a list of professionals with personalized pagination', async () => {
-      professionalsRepository.findAndCount.mockResolvedValueOnce([[], 2]);
-      const professionals = await service.findAll({ page: 2, pageSize: 5 });
+      professionalsRepository.findAndCount.mockResolvedValueOnce([paginatedMock.data, 2]);
 
-      expect(professionals).toEqual({
-        ...paginatedMock,
-        data: [],
-        page: 2,
-        pageSize: 5,
-      });
-    });
-
-    it('should return a list of professional types with status true/false', async () => {
-      professionalsRepository.findAndCount.mockResolvedValueOnce([[], 1]);
-      const professionals = await service.findAll({ status: Status.ALL });
-
-      expect(professionals).toEqual({
-        ...paginatedMock,
-        data: [],
-        total: 1,
-      });
-    });
-
-    it('should limit pageSize to 100', async () => {
-      professionalsRepository.findAndCount.mockResolvedValueOnce([[], 1]);
-      const pagination: PaginationDto = {
-        pageSize: 999,
-      };
+      const pagination: PaginationParamsDto = { offset: 1, limit: 10, status: Status.ALL };
 
       const professionals = await service.findAll(pagination);
 
-      expect(professionals).toEqual({
-        ...paginatedMock,
-        data: [],
-        total: 1,
-        pageSize: 100,
-      });
+      expect(professionals).toEqual({ ...paginatedMock, meta: { ...paginatedMock.meta, perPage: 10 } });
+    });
+
+    it('should return a list of professional types with status true/false', async () => {
+      professionalsRepository.findAndCount.mockResolvedValueOnce([paginatedMock.data, 2]);
+      const professionals = await service.findAll({ status: Status.ALL });
+
+      expect(professionals).toEqual({ ...paginatedMock, meta: { ...paginatedMock.meta, total: 2 } });
+    });
+
+    it('should limit pageSize to 500', async () => {
+      professionalsRepository.findAndCount.mockResolvedValueOnce([[], 0]);
+      const pagination: PaginationParamsDto = { limit: 999 };
+
+      const professionals = await service.findAll(pagination);
+
+      expect(professionals.meta.perPage).toEqual(500);
+    });
+
+    it('should set page size to 1 if 0 is given', async () => {
+      professionalsRepository.findAndCount.mockResolvedValueOnce([[], 0]);
+      const pagination: PaginationParamsDto = { limit: 0 };
+
+      const professionals = await service.findAll(pagination);
+
+      expect(professionals.meta.perPage).toEqual(1);
     });
   });
 
   describe('update', () => {
     it('should return a professional when an existing id is given', async () => {
       professionalTypesRepository.findOneOrFail.mockResolvedValueOnce(professionalMock.professionalType);
-      professionalsRepository.preload.mockResolvedValue({
-        ...professionalMock,
-        ...updateProfessionalMock,
-      });
-      professionalsRepository.save.mockResolvedValue({
-        ...professionalMock,
-        ...updateProfessionalMock,
-      });
+      professionalsRepository.preload.mockResolvedValue({ ...professionalMock, ...updateProfessionalMock });
+      professionalsRepository.save.mockResolvedValue({ ...professionalMock, ...updateProfessionalMock });
 
       const professional = await service.update(1, updateProfessionalMock);
 
-      expect(professional).toEqual({
-        ...professionalMock,
-        ...updateProfessionalMock,
-      });
+      expect(professional).toEqual({ ...professionalMock, ...updateProfessionalMock });
     });
 
     it('should throw an error when an unexisting id is given', async () => {

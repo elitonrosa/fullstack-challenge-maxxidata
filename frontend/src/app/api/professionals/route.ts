@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { externalFetch } from "@/functions/fetch-utils";
-import { ProfessionalDto } from "@/types/professionals-types";
+import { Professional, ProfessionalDto } from "@/types/professionals-types";
 import { PaginationDto } from "@/types/pagination-types";
 import { revalidateTag } from "next/cache";
 import { FetchStatus } from "@/enums/fetch-status";
@@ -24,22 +24,34 @@ export const POST = async (request: NextRequest) => {
 };
 
 export const GET = async () => {
-  const { status, data } = await externalFetch<PaginationDto<ProfessionalDto>>(
-    "/professionals?pageSize=100&status=all",
-    {
-      cache: "force-cache",
-      next: {
-        tags: ["professionals"],
+  let offset = 0;
+  let limit = 500;
+  let allProfessionals: Professional[] = [];
+
+  while (true) {
+    const { status, data } = await externalFetch<PaginationDto<ProfessionalDto>>(
+      `/professionals?offset=${offset}&limit=${limit}&status=all`,
+      {
+        cache: "force-cache",
+        next: {
+          tags: ["professionals"],
+        },
       },
-    },
-  );
+    );
 
-  if (!data) return NextResponse.json({ status, data });
+    if (status !== FetchStatus.SUCCESS) return NextResponse.json({ status: FetchStatus.ERROR, data });
 
-  const professionals = data.data.map((professional) => ({
+    allProfessionals = [...allProfessionals, ...data!.data];
+
+    if (data!.meta.currentPage >= data!.meta.lastPage) break;
+
+    offset += limit;
+  }
+
+  const professionals = allProfessionals.map((professional) => ({
     ...professional,
     professionalType: professional.professionalType.description,
   }));
 
-  return NextResponse.json({ status, data: professionals });
+  return NextResponse.json({ status: FetchStatus.SUCCESS, data: professionals });
 };

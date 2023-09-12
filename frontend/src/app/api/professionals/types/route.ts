@@ -6,21 +6,31 @@ import { FetchStatus } from "@/enums/fetch-status";
 import { revalidateTag } from "next/cache";
 
 export const GET = async () => {
-  const { status, data } = await externalFetch<PaginationDto<ProfessionalTypeDto>>(
-    "/professionals/types?pageSize=100&status=all",
-    {
-      cache: "force-cache",
-      next: {
-        tags: ["professionalTypes"],
+  let offset = 0;
+  let limit = 500;
+  let allProfessionalTypes: ProfessionalTypeDto[] = [];
+
+  while (true) {
+    const { status, data } = await externalFetch<PaginationDto<ProfessionalTypeDto>>(
+      `/professionals/types?offset=${offset}&limit=${limit}&status=all`,
+      {
+        cache: "force-cache",
+        next: {
+          tags: ["professionalTypes"],
+        },
       },
-    },
-  );
+    );
 
-  if (status !== FetchStatus.SUCCESS) return NextResponse.json({ status, data });
+    if (status !== FetchStatus.SUCCESS) return NextResponse.json({ status: FetchStatus.ERROR, data });
 
-  const formattedData = data?.data;
+    allProfessionalTypes = [...allProfessionalTypes, ...data!.data];
 
-  return NextResponse.json({ status, data: formattedData });
+    if (data!.meta.currentPage >= data!.meta.lastPage) break;
+
+    offset += limit;
+  }
+
+  return NextResponse.json({ status: FetchStatus.SUCCESS, data: allProfessionalTypes });
 };
 
 export const POST = async (request: NextRequest) => {

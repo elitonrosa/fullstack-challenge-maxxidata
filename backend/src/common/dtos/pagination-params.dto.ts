@@ -3,29 +3,29 @@ import { Transform } from 'class-transformer';
 import { OrderBy, OrderDirection, Status } from '../enums/pagination.enum';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
-export class PaginationDto {
+export class PaginationParamsDto {
   @ApiPropertyOptional({
-    description: 'Número da página',
-    example: 1,
-    default: 1,
+    description: 'Quantidade de registros a serem pulados',
+    example: 10,
+    default: 0,
   })
   @IsOptional()
   @Transform(({ value }) => parseInt(value))
   @IsInt()
-  readonly page?: number;
+  readonly offset?: number;
 
   @ApiPropertyOptional({
-    description: 'Quantidade de registros por página (mín = 1, max = 100)',
-    default: 10,
+    description: 'Quantidade de registros por página (mín = 1, max = 500)',
+    default: 50,
   })
   @IsOptional()
   @Transform(({ value }) => parseInt(value))
   @IsInt()
-  readonly pageSize?: number;
+  readonly limit?: number;
 
   @ApiPropertyOptional({
     description: 'Status do registro (true = ativo, false = inativo, all = todos os registros)',
-    default: true,
+    default: 'all',
     enum: ['true', 'false', 'all'],
   })
   @IsOptional()

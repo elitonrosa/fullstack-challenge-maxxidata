@@ -1,7 +1,9 @@
 export type PaginationDto<T> = {
   data: T[];
-  total: number;
-  page: number;
-  pageSize: number;
-  totalPages: number;
+  meta: {
+    total: number;
+    currentPage: number;
+    lastPage: number;
+    perPage: number;
+  };
 };

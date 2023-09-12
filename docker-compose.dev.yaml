@@ -15,7 +15,7 @@ services:
     image: app_frontend_dev
     build:
       context: ./frontend
-      dockerfile: prod.Dockerfile
+      dockerfile: dev.Dockerfile
     ports:
       - ${FRONTEND_EXTERNAL_PORT}:${FRONTEND_INTERNAL_PORT}
     environment:

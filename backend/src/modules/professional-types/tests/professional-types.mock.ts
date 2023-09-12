@@ -1,8 +1,8 @@
 import { ProfessionalType } from '../entities/professional-type.entity';
 import { CreateProfessionalTypeDto } from '../dtos/create-professional-type.dto';
 import { UpdateProfessionalTypeDto } from '../dtos/update-professional-type.dto';
-import { Paginated } from '../../../common/types/pagination';
 import { Repository } from 'typeorm';
+import { ProfessionalTypePaginatedDto } from '../dtos/professional-type-paginated.dto';
 
 export type MockRepository<T = any> = Partial<Record<keyof Repository<T>, jest.Mock>>;
 
@@ -23,20 +23,24 @@ export const professionalTypeMock: ProfessionalType = {
   updatedAt: new Date(),
 };
 
-export const defaultPaginatedMock: Paginated<ProfessionalType> = {
+export const defaultPaginatedMock: ProfessionalTypePaginatedDto = {
   data: [professionalTypeMock],
-  page: 1,
-  pageSize: 10,
-  total: 1,
-  totalPages: 1,
+  meta: {
+    total: 1,
+    currentPage: 1,
+    lastPage: 1,
+    perPage: 50,
+  },
 };
 
-export const personalizedPaginatedMock: Paginated<ProfessionalType> = {
+export const personalizedPaginatedMock: ProfessionalTypePaginatedDto = {
   data: [],
-  page: 2,
-  pageSize: 5,
-  total: 1,
-  totalPages: 1,
+  meta: {
+    total: 1,
+    currentPage: 1,
+    lastPage: 1,
+    perPage: 5,
+  },
 };
 
 export const updatedProfessionalTypeMock: ProfessionalType = {

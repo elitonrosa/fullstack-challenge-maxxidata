@@ -19,7 +19,7 @@ async function bootstrap() {
     .addTag('Tipos de Profissionais')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/documentation', app, document);
+  SwaggerModule.setup('api/documentation', app, document, { swaggerOptions: { defaultModelsExpandDepth: -1 } });
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
