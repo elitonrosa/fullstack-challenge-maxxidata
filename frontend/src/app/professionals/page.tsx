@@ -6,7 +6,9 @@ import Header from "@/components/layout/header";
 
 const getProfessionals = async () => {
   const { data } = await localFetch<Professional[]>("/professionals");
+
   if (!data) return [];
+
   return data;
 };
 

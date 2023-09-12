@@ -24,13 +24,13 @@ export const POST = async (request: NextRequest) => {
 };
 
 export const GET = async () => {
-  const pageSize = 100;
-  let page = 1;
+  let offset = 0;
+  let limit = 500;
   let allProfessionals: Professional[] = [];
 
   while (true) {
     const { status, data } = await externalFetch<PaginationDto<ProfessionalDto>>(
-      `/professionals?pageSize=${pageSize}&page=${page}&status=all`,
+      `/professionals?offset=${offset}&limit=${limit}&status=all`,
       {
         cache: "force-cache",
         next: {
@@ -39,36 +39,19 @@ export const GET = async () => {
       },
     );
 
-    if (status !== FetchStatus.SUCCESS) return NextResponse.json({ status, data });
+    if (status !== FetchStatus.SUCCESS) return NextResponse.json({ status: FetchStatus.ERROR, data });
 
-    const professionals = data?.data.map((professional) => ({
-      ...professional,
-      professionalType: professional.professionalType.description,
-    }));
+    allProfessionals = [...allProfessionals, ...data!.data];
 
-    allProfessionals = [...allProfessionals, ...professionals];
+    if (data!.meta.currentPage >= data!.meta.lastPage) break;
 
-    if (data?.meta.currentPage === data?.meta.totalPages) break;
-
-    page++;
+    offset += limit;
   }
-};
 
-// const { status, data } = await externalFetch<PaginationDto<ProfessionalDto>>(
-//   "/professionals?pageSize=100&status=all",
-//   {
-//     cache: "force-cache",
-//     next: {
-//       tags: ["professionals"],
-//     },
-//   },
-// );
-//
-// if (status !== FetchStatus.SUCCESS) return NextResponse.json({ status, data });
-//
-// const professionals = data?.data.map((professional) => ({
-//   ...professional,
-//   professionalType: professional.professionalType.description,
-// }));
-//
-// return NextResponse.json({ status, data: professionals });
+  const professionals = allProfessionals.map((professional) => ({
+    ...professional,
+    professionalType: professional.professionalType.description,
+  }));
+
+  return NextResponse.json({ status: FetchStatus.SUCCESS, data: professionals });
+};
