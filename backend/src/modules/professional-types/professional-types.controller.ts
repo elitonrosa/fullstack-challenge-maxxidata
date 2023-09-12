@@ -3,8 +3,7 @@ import { ProfessionalTypesService } from './professional-types.service';
 import { CreateProfessionalTypeDto } from './dtos/create-professional-type.dto';
 import { UpdateProfessionalTypeDto } from './dtos/update-professional-type.dto';
 import { ProfessionalType } from './entities/professional-type.entity';
-import { Paginated } from '../../common/types/pagination';
-import { PaginationDto } from '../../common/dtos/pagination.dto';
+import { PaginationParamsDto } from '../../common/dtos/pagination-params.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ProfessionalTypePaginatedDto } from './dtos/professional-type-paginated.dto';
 import { NestBadRequestErrorSwagger } from '../../helpers/swagger/nest-bad-request-error.swagger';
@@ -38,7 +37,7 @@ export class ProfessionalTypesController {
     description: 'Lista de tipos de profissionais',
     type: ProfessionalTypePaginatedDto,
   })
-  async findAll(@Query() pagination: PaginationDto): Promise<Paginated<ProfessionalType>> {
+  async findAll(@Query() pagination: PaginationParamsDto): Promise<ProfessionalTypePaginatedDto> {
     return this.professionalTypesService.findAll(pagination);
   }
 
