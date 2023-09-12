@@ -116,10 +116,12 @@ Para executar a aplicação em modo "desenvolvimento", siga os passos abaixo:
       ...
     }
   ],
-  "total": 20,
-  "pageSize": 10,
-  "page": 1,
-  "totalPages": 2
+  "meta": {
+    "total": 20,
+    "currentPage": 1,
+    "lastPage": 1,
+    "perPage": 20
+  }
 }
 ```
 
@@ -138,10 +140,12 @@ Para executar a aplicação em modo "desenvolvimento", siga os passos abaixo:
       ...
     }
   ],
-  "total": 20,
-  "pageSize": 10,
-  "page": 1,
-  "totalPages": 2
+  "meta": {
+    "total": 20,
+    "currentPage": 1,
+    "lastPage": 1,
+    "perPage": 20
+  }
 }
 ```
 
