@@ -29,7 +29,6 @@ services:
     working_dir: /app-frontend
     volumes:
       - app_frontend_data:/app-frontend
-    command: npm run start
     depends_on:
       backend:
         condition: service_healthy
@@ -55,7 +54,6 @@ services:
     working_dir: /app-backend
     volumes:
       - app_backend_data:/app-backend
-    command: npm run start
     depends_on:
       db:
         condition: service_healthy
