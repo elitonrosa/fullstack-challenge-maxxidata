@@ -24,7 +24,7 @@ services:
       NEXT_TELEMETRY_DISABLED: 1
     restart: on-failure
     working_dir: /app-frontend
-    command: npm run dev
+    entrypoint: npm run dev
     volumes:
       - ./frontend/src:/app-frontend/src
     depends_on:
@@ -50,9 +50,8 @@ services:
       DB_NAME: ${DB_NAME}
     restart: on-failure
     working_dir: /app-backend
-    command: npm run start:dev
     volumes:
-      - ./backend:/app-backend
+      - ./backend/src:/app-backend/src
     depends_on:
       db:
         condition: service_healthy
